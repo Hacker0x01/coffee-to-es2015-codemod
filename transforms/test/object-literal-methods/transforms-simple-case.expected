@@ -1,0 +1,5 @@
+({
+  method(args) {
+    return console.info(args);
+  }
+});
