@@ -1,0 +1,7 @@
+var handleChange;
+
+handleChange = (function(_this) {
+  return function(event) {
+    return console.info(_this.foo);
+  };
+})(this);

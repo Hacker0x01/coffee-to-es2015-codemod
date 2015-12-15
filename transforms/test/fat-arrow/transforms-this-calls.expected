@@ -1,0 +1,5 @@
+var handleChange;
+
+handleChange = event => {
+  return console.info(this.foo);
+};

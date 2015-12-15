@@ -1,0 +1,16 @@
+var handleChange;
+
+handleChange = (function(_this) {
+  return function(event) {
+    var nested;
+    event.preventDefault();
+    return nested = function() {
+      var superNested;
+      return superNested = (function(_this) {
+        return function() {
+          return console.info(event);
+        };
+      })(this);
+    };
+  };
+})(this);

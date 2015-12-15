@@ -1,0 +1,12 @@
+var handleChange;
+
+handleChange = event => {
+  var nested;
+  event.preventDefault();
+  return nested = function() {
+    var superNested;
+    return superNested = () => {
+      return console.info(event);
+    };
+  };
+};
