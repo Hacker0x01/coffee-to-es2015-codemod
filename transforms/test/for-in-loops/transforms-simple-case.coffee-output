@@ -1,0 +1,6 @@
+var a, i, len;
+
+for (i = 0, len = b.length; i < len; i++) {
+  a = b[i];
+  console.info(a);
+}

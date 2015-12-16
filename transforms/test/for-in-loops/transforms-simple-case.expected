@@ -1,0 +1,5 @@
+var a, i, len;
+
+for (let a of b) {
+  console.info(a);
+}
