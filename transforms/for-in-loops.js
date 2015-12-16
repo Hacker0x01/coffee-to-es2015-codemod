@@ -17,6 +17,8 @@ for (a of b) {
 Assumptions:
 - All for-loops that have an update and where the first expression in the body
   is an UpdateExpression are considered CoffeeScript for..in loops and therefor converted
+- If the update of a for loop is an assignment, we assume that we need to keep track
+  of index, and therfor need to run `.forEach`
 
 FIXME:
 - This transform is pretty big on the assumptions, we should try and lock it down
@@ -48,7 +50,38 @@ module.exports = (file, api) => {
     })
     .size() > 0;
 
-  if (forStatementsChanged) {
+  const forStatementsWithIndexChanged = root
+    .find(j.ForStatement, {
+      update: {
+        type: "AssignmentExpression",
+      },
+    })
+    .replaceWith(exp => {
+      const newBody = exp.value.body;
+      const oldKeyExpression = newBody.body.shift().expression;
+      const indexIdentifier = oldKeyExpression.right.property;
+      const keyIdentifier = oldKeyExpression.left;
+
+      return j.expressionStatement(
+       j.callExpression(
+         j.memberExpression(
+           oldKeyExpression.right.object,
+           j.identifier("forEach")
+         ),
+         [
+           j.arrowFunctionExpression(
+             [
+               keyIdentifier,
+               indexIdentifier,
+             ],
+             newBody
+           ),
+         ]
+       )
+     );
+    });
+
+  if (forStatementsChanged || forStatementsWithIndexChanged) {
     return root.toSource();
   }
 

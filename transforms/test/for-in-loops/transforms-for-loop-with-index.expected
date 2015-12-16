@@ -1,0 +1,5 @@
+var a, i, j, len;
+
+b.forEach((a, i) => {
+  console.info(a);
+});
