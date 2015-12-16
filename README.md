@@ -1,6 +1,6 @@
 ## coffee-to-es2015-codemod
 
-[![Build Status](https://travis-ci.org/Hacker0x01/coffee-to-es2015-codemod.svg)](https://travis-ci.org/Hacker0x01/coffee-to-es2015-codemod)
+[![Build Status](https://travis-ci.org/Hacker0x01/coffee-to-es2015-codemod.svg?branch=master)](https://travis-ci.org/Hacker0x01/coffee-to-es2015-codemod)
 
 This repository contains a collection of codemod scripts that should help you convert your CoffeeScript codebase to ES2015.
 
