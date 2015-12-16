@@ -1,0 +1,8 @@
+var handleChange;
+
+handleChange = function(param) {
+  if (param == null) {
+    param = true;
+  }
+  return console.info(param);
+};

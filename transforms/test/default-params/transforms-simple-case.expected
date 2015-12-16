@@ -1,0 +1,5 @@
+var handleChange;
+
+handleChange = function(param=true) {
+  return console.info(param);
+};
