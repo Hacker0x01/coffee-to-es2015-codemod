@@ -12,7 +12,6 @@ Example:
 ```
 */
 
-
 const transformExpressionsIntoTemplates = (root, j) =>
   root
     .find(j.BinaryExpression, { operator: "+" })
