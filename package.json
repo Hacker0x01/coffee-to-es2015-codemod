@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A set of JSCodeshift transforms that will help you transform your CoffeeScript codebase to ES2015",
   "scripts": {
-    "test": "NODE_ENV=test jest",
+    "test": "f() { EXIT=0; npm run lint || EXIT=$?; NODE_ENV=test jest $@ || EXIT=$?; exit $EXIT; }; f",
     "lint": "eslint .",
     "create-test": "f() { mkdir -p ./transforms/test/$1; touch ./transforms/test/$1/$2.coffee-output; touch ./transforms/test/$1/$2.expected; }; f"
   },
