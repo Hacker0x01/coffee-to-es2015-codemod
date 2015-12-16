@@ -17,7 +17,7 @@ method: (args) ->
 ```
 */
 
-export default (file, api) => {
+module.exports = (file, api) => {
   const j = api.jscodeshift;
   const root = j(file.source);
 

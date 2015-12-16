@@ -32,7 +32,7 @@ const findAndRunTestsForDirectory = directory => {
 
   describe(`#${path.basename(directory)}`, () => {
     const transformPath = path.join(directory, "..", "..", path.basename(directory));
-    const transform = require(path.resolve(transformPath)).default;
+    const transform = require(transformPath);
     coffeeFiles.forEach(coffeeFile => test(coffeeFile, transform));
   });
 };
