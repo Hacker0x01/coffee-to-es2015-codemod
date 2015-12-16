@@ -9,8 +9,8 @@ const test = (coffeeOutputFilename, transform) => {
 
   it(testName, () => {
     const expectedPath = coffeeOutputFilename.replace(".coffee-output", ".expected");
-    const coffeeOut = fs.readFileSync(coffeeOutputFilename, "utf8");
-    const expected = fs.readFileSync(expectedPath, "utf8");
+    const coffeeOut = fs.readFileSync(coffeeOutputFilename).toString();
+    const expected = fs.readFileSync(expectedPath).toString();
 
     const output = transform({
       path: coffeeOutputFilename,
