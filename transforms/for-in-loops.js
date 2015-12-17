@@ -63,22 +63,22 @@ module.exports = (file, api) => {
       const keyIdentifier = oldKeyExpression.left;
 
       return j.expressionStatement(
-       j.callExpression(
-         j.memberExpression(
-           oldKeyExpression.right.object,
-           j.identifier("forEach")
-         ),
-         [
-           j.arrowFunctionExpression(
-             [
-               keyIdentifier,
-               indexIdentifier,
-             ],
-             newBody
-           ),
-         ]
-       )
-     );
+        j.callExpression(
+          j.memberExpression(
+            oldKeyExpression.right.object,
+            j.identifier("forEach")
+          ),
+          [
+            j.arrowFunctionExpression(
+              [
+                keyIdentifier,
+                indexIdentifier,
+              ],
+              newBody
+            ),
+          ]
+        )
+      );
     });
 
   if (forStatementsChanged || forStatementsWithIndexChanged) {
