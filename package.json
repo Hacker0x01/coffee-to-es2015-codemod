@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "description": "A set of JSCodeshift transforms that will help you transform your CoffeeScript codebase to ES2015",
   "scripts": {
-    "test": "f() { EXIT=0; npm run lint || EXIT=$?; npm run jest $@ || EXIT=$?; exit $EXIT; }; f",
+    "test": "f() { EXIT=0; npm run lint || EXIT=$?; npm run mocha $@ || EXIT=$?; exit $EXIT; }; f",
     "lint": "eslint .",
     "create-test": "f() { mkdir -p ./transforms/test/$1; touch ./transforms/test/$1/$2.coffee-output; touch ./transforms/test/$1/$2.expected; }; f",
-    "jest": "NODE_ENV=test jest"
+    "mocha": "NODE_ENV=test mocha"
   },
   "repository": {
     "type": "git",
@@ -28,18 +28,12 @@
   "homepage": "https://github.com/Hacker0x01/coffee-to-es2015-codemod#readme",
   "dependencies": {
     "babel-eslint": "^4.1.6",
-    "babel-jest": "^5.3.0",
+    "chai": "^3.4.1",
     "eslint": "^1.10.3",
-    "jest-cli": "^0.8.1",
-    "jscodeshift": "^0.3.10"
+    "jscodeshift": "^0.3.10",
+    "mocha": "^2.3.4"
   },
-  "jest": {
-    "scriptPreprocessor": "./node_modules/babel-jest",
-    "testDirectoryName": "test",
-    "setupEnvScriptFile": "jest/env.js",
-    "testPathPattern": ".*-test.js",
-    "testPathDirs": [
-      "transforms"
-    ]
+  "devDependencies": {
+    "babel-core": "^5.8.21"
   }
 }
