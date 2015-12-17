@@ -1,0 +1,6 @@
+var a, i, j, len;
+
+for (i = j = 0, len = foo.length; j < len; i = ++j) {
+  a = foo[i];
+  console.info(a, i);
+}
