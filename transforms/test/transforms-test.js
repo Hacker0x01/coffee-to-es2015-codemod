@@ -1,5 +1,3 @@
-jest.autoMockOff();
-
 import fs from "fs";
 import path from "path";
 const jscodeshift = require("jscodeshift");

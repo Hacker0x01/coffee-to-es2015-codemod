@@ -36,9 +36,10 @@
   "jest": {
     "scriptPreprocessor": "./node_modules/babel-jest",
     "testDirectoryName": "test",
+    "setupEnvScriptFile": "jest/env.js",
     "testPathPattern": ".*-test.js",
     "testPathDirs": [
-      "transforms/"
+      "transforms"
     ]
   }
 }
