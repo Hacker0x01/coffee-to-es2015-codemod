@@ -50,38 +50,7 @@ module.exports = (file, api) => {
     })
     .size() > 0;
 
-  const forStatementsWithIndexChanged = root
-    .find(j.ForStatement, {
-      update: {
-        type: "AssignmentExpression",
-      },
-    })
-    .replaceWith(exp => {
-      const newBody = exp.value.body;
-      const oldKeyExpression = newBody.body.shift().expression;
-      const indexIdentifier = oldKeyExpression.right.property;
-      const keyIdentifier = oldKeyExpression.left;
-
-      return j.expressionStatement(
-        j.callExpression(
-          j.memberExpression(
-            oldKeyExpression.right.object,
-            j.identifier("forEach")
-          ),
-          [
-            j.arrowFunctionExpression(
-              [
-                keyIdentifier,
-                indexIdentifier,
-              ],
-              newBody
-            ),
-          ]
-        )
-      );
-    });
-
-  if (forStatementsChanged || forStatementsWithIndexChanged) {
+  if (forStatementsChanged) {
     return root.toSource();
   }
 
