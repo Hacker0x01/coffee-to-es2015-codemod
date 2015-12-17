@@ -47,4 +47,6 @@ const directories = allFiles
   // Filter out directories
   .filter(file => fs.statSync(file).isDirectory());
 
-directories.forEach(findAndRunTestsForDirectory);
+describe("approvals", () => {
+  directories.forEach(findAndRunTestsForDirectory);
+});

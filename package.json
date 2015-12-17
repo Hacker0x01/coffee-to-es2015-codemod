@@ -5,7 +5,7 @@
   "scripts": {
     "test": "f() { EXIT=0; npm run lint || EXIT=$?; npm run mocha $@ || EXIT=$?; exit $EXIT; }; f",
     "lint": "eslint .",
-    "create-test": "f() { mkdir -p ./transforms/test/$1; touch ./transforms/test/$1/$2.coffee-output; touch ./transforms/test/$1/$2.expected; }; f",
+    "create-test": "f() { mkdir -p ./test/approvals/$1; touch ./test/approvals/$1/$2.coffee-output; touch ./test/approvals/$1/$2.expected; }; f",
     "mocha": "NODE_ENV=test mocha"
   },
   "repository": {

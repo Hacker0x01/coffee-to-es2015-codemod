@@ -1,0 +1,12 @@
+var Foo;
+
+Foo = Backbone.Model.extend({
+  constructor() {
+    this.boundMethod = this.boundMethod.bind(this);
+    return Backbone.Model.prototype.constructor.apply(this, arguments);
+  },
+
+  boundMethod() {
+    return console.info(this);
+  }
+});

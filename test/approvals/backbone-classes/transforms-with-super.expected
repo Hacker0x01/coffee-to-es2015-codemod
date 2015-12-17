@@ -1,0 +1,8 @@
+var Foo;
+
+Foo = Backbone.Model.extend({
+  constructor() {
+    Backbone.Model.prototype.constructor.apply(this, arguments);
+    console.info('constructor');
+  }
+});
