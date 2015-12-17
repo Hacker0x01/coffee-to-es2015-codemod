@@ -9,9 +9,10 @@ const test = (coffeeOutputFilename, transform) => {
     const expectedPath = coffeeOutputFilename.replace(".coffee-output", ".expected");
     const coffeeOut = fs.readFileSync(coffeeOutputFilename).toString();
     const expected = fs.readFileSync(expectedPath).toString();
+    const fileName = path.basename(coffeeOutputFilename);
 
     const output = transform({
-      path: coffeeOutputFilename,
+      path: fileName,
       source: coffeeOut,
     }, { jscodeshift }, {});
 
