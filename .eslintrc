@@ -199,7 +199,7 @@
     "no-octal-escape": 2,
     "no-this-before-super": 2,
     "no-alert": 0,
-    "no-unused-expressions": 2,
+    "no-unused-expressions": 0,
     "no-class-assign": 2,
     "spaced-comment": [
       2,
