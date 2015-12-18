@@ -12,12 +12,10 @@ var React;
 
 import React from "react/addons";
 ```
-
-FIXME:
-- We should clean up the empty variable declaration for the import
 */
 
 import findParentOfType from "./util/find-parent-of-type";
+import removeVariableDeclarator from "./util/remove-variable-declarator";
 
 module.exports = (file, api) => {
   const j = api.jscodeshift;
@@ -32,6 +30,9 @@ module.exports = (file, api) => {
     })
     .forEach(exp => {
       const parentExpStat = findParentOfType(exp, "ExpressionStatement");
+
+      // Remove the CoffeeScript-hoisted variable declarator
+      removeVariableDeclarator(parentExpStat.node.expression.left.name, exp.scope.path, api);
 
       if (exp.parent.node.type === "CallExpression") {
         const parentCall = exp.parent;
