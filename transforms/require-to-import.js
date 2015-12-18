@@ -14,70 +14,116 @@ import React from "react/addons";
 ```
 */
 
-import findParentOfType from "./util/find-parent-of-type";
-import removeVariableDeclarator from "./util/remove-variable-declarator";
-
-module.exports = (file, api) => {
+export default (file, api) => {
   const j = api.jscodeshift;
   const root = j(file.source);
 
-  const requiresChanged = root
+  const isImmediatelyInvoked = exp => exp.parent.value.type === "CallExpression";
+  const getOuterCallExpression = exp => {
+    if (isImmediatelyInvoked(exp)) {
+      return exp.parent;
+    }
+
+    return exp;
+  };
+  const isBeingAssigned = exp =>
+    getOuterCallExpression(exp).parent.value.type !== "ExpressionStatement";
+  const getAssignmentRoot = exp => getOuterCallExpression(exp).parent;
+
+  const getOuterExpression = exp => {
+    if (isBeingAssigned(exp)) {
+      return getAssignmentRoot(exp).parent;
+    }
+
+    return getOuterCallExpression(exp).parent;
+  };
+
+  const getAssignmentSubjectName = exp => {
+    const assignmentRoot = getAssignmentRoot(exp);
+
+    if (assignmentRoot.value.type === "VariableDeclarator") {
+      return assignmentRoot.value.id.name;
+    } else if (assignmentRoot.value.type === "AssignmentExpression") {
+      return assignmentRoot.value.left.name;
+    }
+  };
+
+  const isTopLevelExpression = exp =>
+    getOuterExpression(exp).parent.value.type === "Program";
+
+  const requiresTransformed = root
     .find(j.CallExpression, {
       callee: {
         type: "Identifier",
         name: "require",
       },
     })
+    .filter(isTopLevelExpression)
     .forEach(exp => {
-      const parentExpStat = findParentOfType(exp, "ExpressionStatement");
+      const outerExpression = getOuterExpression(exp);
+      const specifiers = [];
 
-      // Remove the CoffeeScript-hoisted variable declarator
-      removeVariableDeclarator(parentExpStat.node.expression.left.name, exp.scope.path, api);
+      if (isBeingAssigned(exp)) {
+        specifiers.push(j.importDefaultSpecifier(
+          j.identifier(getAssignmentSubjectName(exp))
+        ));
 
-      if (exp.parent.node.type === "CallExpression") {
-        const parentCall = exp.parent;
-        const importIdent = j.identifier(`${parentExpStat.node.expression.left.name}Import`);
-        const origIdent = parentExpStat.node.expression.left;
-
-        parentExpStat.replace(
-          j.importDeclaration(
-            [
-              j.importDefaultSpecifier(importIdent),
-            ],
-            exp.node.arguments[0]
-          )
-        );
-
-        parentExpStat.insertAfter(
-          j.variableDeclaration(
-            "const",
-            [
-              j.variableDeclarator(
-                origIdent,
-                j.callExpression(
-                  importIdent, parentCall.node.arguments
-                )
-              ),
-            ]
-          )
-        );
-      } else {
-        let specifiers = [];
-
-        if (parentExpStat.node.expression.left) {
-          specifiers = [
-            j.importDefaultSpecifier(parentExpStat.node.expression.left),
-          ];
+        if (isImmediatelyInvoked(exp)) {
+          specifiers[0].local.name += "Import";
         }
 
-        parentExpStat.replace(
-          j.importDeclaration(specifiers, exp.node.arguments[0])
-        );
+        j(exp.scope.path)
+          .find(j.VariableDeclarator, {
+            id: {
+              type: "Identifier",
+              name: getAssignmentSubjectName(exp),
+            },
+            init: null,
+          })
+          .remove();
+      } else if (isImmediatelyInvoked(exp)) {
+        specifiers.push(j.importDefaultSpecifier(
+          j.identifier("anonymousImport")
+        ));
       }
+
+      outerExpression.insertBefore(
+        j.importDeclaration(
+          specifiers,
+          exp.value.arguments[0]
+        )
+      );
+
+      if (isImmediatelyInvoked(exp)) {
+        const callExp = j.callExpression(
+          j.identifier(specifiers[0].local.name),
+          getOuterCallExpression(exp).value.arguments
+        );
+
+        if (isBeingAssigned(exp)) {
+          outerExpression.insertBefore(
+            j.variableDeclaration(
+              "const",
+              [
+                j.variableDeclarator(
+                  j.identifier(getAssignmentSubjectName(exp)),
+                  callExp
+                ),
+              ]
+            )
+          );
+        } else {
+          outerExpression.insertBefore(
+            j.expressionStatement(callExp)
+          );
+        }
+      }
+
+      getOuterExpression(exp).replace();
     })
     .size() > 0;
 
-  if (requiresChanged) {
+  if (requiresTransformed) {
     return root.toSource();
   }
 

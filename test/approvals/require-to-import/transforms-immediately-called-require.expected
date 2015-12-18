@@ -1,0 +1,2 @@
+import anonymousImport from 'jquery-plugin';
+anonymousImport($);

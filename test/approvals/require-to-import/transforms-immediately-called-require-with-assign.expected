@@ -1,0 +1,2 @@
+import jQueryPluginImport from 'jquery-plugin';
+const jQueryPlugin = jQueryPluginImport($);

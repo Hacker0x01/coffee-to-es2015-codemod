@@ -1,3 +1,0 @@
-var jQueryPlugin;
-
-jQueryPlugin = require("jquery-plugin")($);
