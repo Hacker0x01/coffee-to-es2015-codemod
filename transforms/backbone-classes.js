@@ -129,6 +129,14 @@ module.exports = (file, api) => {
         )
       );
 
+  const hasStaticProp = exp =>
+    exp.value.callee.body.body.find(bodyElement =>
+      bodyElement.type === "ExpressionStatement" &&
+      bodyElement.expression.type === "AssignmentExpression" &&
+      bodyElement.expression.left.type === "MemberExpression" &&
+      bodyElement.expression.left.object.type === "Identifier"
+    );
+
   return j(file.source)
     .find(j.CallExpression, {
       callee: {
@@ -137,7 +145,9 @@ module.exports = (file, api) => {
     })
     .filter(exp =>
       exp.value.callee.params.length === 1 &&
-      exp.value.callee.params[0].name === "superClass")
+      exp.value.callee.params[0].name === "superClass"
+    )
+    .filter(exp => !hasStaticProp(exp))
     .replaceWith(exp => {
       const callee = exp.value.callee;
       const superClass = exp.value.arguments[0];
