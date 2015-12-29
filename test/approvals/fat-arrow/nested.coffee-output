@@ -1,0 +1,11 @@
+var a;
+
+a = (function(_this) {
+  return function() {
+    var b;
+    console.info(_this);
+    return b = function() {
+      return console.info(_this);
+    };
+  };
+})(this);
