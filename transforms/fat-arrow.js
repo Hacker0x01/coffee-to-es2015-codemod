@@ -80,6 +80,17 @@ module.exports = (file, api) => {
         }
       });
 
+  const argumentsUsedInArrowMethods = () =>
+    root
+      .find(j.ArrowFunctionExpression)
+      .filter(exp =>
+        j(exp)
+          .find(j.Identifier, { name: "arguments" })
+          .filter(identifier => identifier.scope.path === exp)
+          .size() > 0
+      )
+      .size() > 0;
+
   const replaceOldThis = () =>
     root
       .find(j.Identifier, { name: "_this" })
@@ -88,6 +99,13 @@ module.exports = (file, api) => {
   if (transformSimpleFatArrows()) {
     transformNestedFatArrows();
     replaceOldThis();
+
+    if (argumentsUsedInArrowMethods()) {
+      throw new Error("arguments does not work the same way in ES2015 arrow" +
+        "methods as it does in CoffeeScript arrow methods. Skipping transformation." +
+        "For more information, please refer to:" +
+        "https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions#Lexical_arguments`");
+    }
 
     return root.toSource();
   }
