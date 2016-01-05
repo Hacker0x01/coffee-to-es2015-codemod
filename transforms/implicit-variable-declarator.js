@@ -29,6 +29,7 @@ module.exports = function(file, api) {
       .find(j.ExpressionStatement, {
         expression: {
           type: "AssignmentExpression",
+          operator: "=",
           left: {
             type: "Identifier",
             name: declaratorPath.value.id.name,
