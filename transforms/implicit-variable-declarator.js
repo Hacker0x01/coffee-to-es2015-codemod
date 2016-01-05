@@ -16,9 +16,6 @@ var a = 1;
 ```
 
 This transform finds all assignments and replaces them with variable declarators.
-
-FIXME:
-- I don't think that this properly covers all cases. We should write more tests
 */
 
 module.exports = function(file, api) {
