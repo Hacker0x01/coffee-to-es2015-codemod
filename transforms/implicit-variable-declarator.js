@@ -35,7 +35,8 @@ module.exports = function(file, api) {
             name: declaratorPath.value.id.name,
           },
         },
-      });
+      })
+      .filter(exp => declaratorPath.scope === exp.scope);
 
   const declaratorsChanged = root
     .find(j.VariableDeclarator, {
