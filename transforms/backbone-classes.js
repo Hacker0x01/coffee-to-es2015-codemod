@@ -117,11 +117,11 @@ module.exports = (file, api) => {
         j.callExpression(
           j.memberExpression(
             j.memberExpression(
-              superClass,
               j.memberExpression(
-                j.identifier("prototype"),
-                exp.value.callee.object.property
-              )
+                superClass,
+                j.identifier("prototype")
+              ),
+              exp.value.callee.object.property
             ),
             j.identifier("apply")
           ),
